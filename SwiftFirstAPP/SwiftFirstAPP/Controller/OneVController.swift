@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SDWebImage
+
 class clasName {
     let s1 = 100
     let s2 = 200

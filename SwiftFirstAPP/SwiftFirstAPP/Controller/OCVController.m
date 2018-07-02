@@ -177,8 +177,10 @@
 
     [_dataArray writeToFile:[self documentsPath:@"usefile.txt"] atomically:YES];
     [_dataArray2 writeToFile:[self documentsPath:@"usefile2.txt"] atomically:YES];
+
     [self.tableView reloadData];
-    
+    NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 #pragma mark 将数组存储入程序文件 arrayWithContentsOfFile
@@ -217,6 +219,9 @@
         _dataArray = [NSMutableArray arrayWithArray:userinfo];
         _dataArray2 = [NSMutableArray arrayWithArray:userinfo2];
         [self.tableView reloadData];
+        NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
     }
     
   
