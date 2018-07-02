@@ -10,7 +10,13 @@
 #import "SwiftFirstAPP-Swift.h"
 #import "ChatOneCell.h"
 
-
+/*
+ (反复用到的代码，可以写到一个方法里)
+ 优化聊天界面tableView上移的问题
+ 点击发送按钮，自动清除输入框内容
+ 增加无聊天数据提示
+ 增加清除聊天记录功能
+ */
 @interface OCVController ()<UITableViewDelegate, UITableViewDataSource>
 
 {
@@ -22,6 +28,8 @@
 @property (nonatomic, strong)NSMutableArray *dataArray2;
 @property (nonatomic, strong)UITextField *textF;
 
+@property (nonatomic, strong)UILabel *placeLB;
+
 @property (nonatomic, strong)UIView *iPutV;
 
 @end
@@ -31,11 +39,18 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    self.navigationItem.title = @"测试聊天";
+    self.navigationItem.title = _nameStr;
     self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清除" style:(UIBarButtonItemStylePlain) target:self action:@selector(handleCleanAction:)];
+    
     [self readFileArray];
     
     
+    
+}
+//清除聊天记录
+- (void)handleCleanAction:(UIBarButtonItem *)sender {
+    [self deleteFile];
 }
 
 - (void)viewDidLoad {
@@ -58,7 +73,8 @@
     CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
     CGFloat hightT = NavRect.size.height +rectStatus.size.height;
     _iPutV = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-hightT-50,[UIScreen mainScreen].bounds.size.width,50)];
-    _iPutV.backgroundColor = [UIColor whiteColor];
+    
+    _iPutV.backgroundColor = [UIColor colorWithRed:240/255.0 green:240/255.0 blue:240/255.0 alpha:0.8];
     
     
     
@@ -124,7 +140,13 @@
     
     _iPutV.frame =CGRectMake(0, [UIScreen mainScreen].bounds.size.height-hightT-height-50,[UIScreen mainScreen].bounds.size.width,50);
     _tableView.frame =  CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-hightT-50-height);
+    if (_dataArray.count >0) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+ 
 }
+
 
 //当键退出
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -139,6 +161,11 @@
     int height = keyboardRect.size.height;
     _iPutV.frame =CGRectMake(0, [UIScreen mainScreen].bounds.size.height-hightT-height-50,[UIScreen mainScreen].bounds.size.width,50);
       _tableView.frame =  CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-hightT-50);
+    if (_dataArray.count > 0) {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+
     
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -166,8 +193,8 @@
     if (_textF.text.length == 0) {
         return;
     }
-    
 
+    
     [_dataArray addObject:_textF.text];
     if ([typeSpeaker isEqualToString:@"甲方"]) {
         [_dataArray2 addObject:@"甲方"];
@@ -175,12 +202,15 @@
         [_dataArray2 addObject:@"已方"];
     }
 
+#pragma mark 将聊天记录写入到本地
     [_dataArray writeToFile:[self documentsPath:@"usefile.txt"] atomically:YES];
     [_dataArray2 writeToFile:[self documentsPath:@"usefile2.txt"] atomically:YES];
 
     [self.tableView reloadData];
+    [self hidenHD];
     NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
     [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    _textF.text = @"";
 }
 
 #pragma mark 将数组存储入程序文件 arrayWithContentsOfFile
@@ -200,6 +230,43 @@
     return documentsDirectory;
 }
 
+// 删除沙盒里的文件
+-(void)deleteFile {
+    NSFileManager* fileManager=[NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    
+    //文件名
+    NSString *uniquePath=[[paths objectAtIndex:0] stringByAppendingPathComponent:@"usefile.txt"];
+    NSString *uniquePath2=[[paths objectAtIndex:0] stringByAppendingPathComponent:@"usefile2.txt"];
+    
+    BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:uniquePath];
+    BOOL blHave2=[[NSFileManager defaultManager] fileExistsAtPath:uniquePath2];
+    if (!blHave) {
+        NSLog(@"no  have");
+        return ;
+    }else {
+        NSLog(@" have");
+        BOOL blDele= [fileManager removeItemAtPath:uniquePath error:nil];
+          BOOL blDele2= [fileManager removeItemAtPath:uniquePath2 error:nil];
+        if (blDele) {
+            NSLog(@"dele success");
+            
+            CGRect NavRect = self.navigationController.navigationBar.frame;
+            CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
+            CGFloat hightT = NavRect.size.height +rectStatus.size.height;
+            [self.view endEditing:YES];
+            _iPutV.frame =CGRectMake(0, [UIScreen mainScreen].bounds.size.height-hightT-50,[UIScreen mainScreen].bounds.size.width,50);
+            [_dataArray removeAllObjects];
+            [_dataArray2 removeAllObjects];
+            [self.tableView reloadData];
+            [self showHD];
+        }else {
+            NSLog(@"dele fail");
+        }
+        
+    }
+}
+
 -(void)readFileArray
 {
     NSLog(@"readfile........\n");
@@ -215,12 +282,14 @@
     if (userinfo.count == 0) {
         _dataArray = [NSMutableArray array];
         _dataArray2 = [NSMutableArray array];
+        [self showHD];
     }else {
         _dataArray = [NSMutableArray arrayWithArray:userinfo];
         _dataArray2 = [NSMutableArray arrayWithArray:userinfo2];
         [self.tableView reloadData];
         NSIndexPath *path = [NSIndexPath indexPathForRow:self.dataArray.count -1 inSection:0];
         [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [self hidenHD];
         
     }
     
@@ -229,6 +298,20 @@
 }
 
 
+#pragma mark 无数据源提示当前无数据
+-(void)showHD {
+    _placeLB = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 40)];
+    _placeLB.center = self.tableView.center;
+    _placeLB.text = @"暂无聊天内容";
+    _placeLB.textAlignment = NSTextAlignmentCenter;
+    [self.tableView addSubview:_placeLB];
+}
+-(void)hidenHD {
+    if (_placeLB) {
+    [_placeLB removeFromSuperview];
+    }
+    
+}
 
 
 -(void)configureVC2 {
@@ -285,7 +368,12 @@
 
 //
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    CGRect NavRect = self.navigationController.navigationBar.frame;
+    CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
+    CGFloat hightT = NavRect.size.height +rectStatus.size.height;
+    [self.view endEditing:YES];
     
+      _iPutV.frame =CGRectMake(0, [UIScreen mainScreen].bounds.size.height-hightT-50,[UIScreen mainScreen].bounds.size.width,50);
 }
 
 

@@ -17,7 +17,7 @@ class BaseBarVController: UITabBarController {
         
         
         let VC1 = OneVController();
-        VC1.title = "第一页";
+        VC1.title = "小信";
 //        VC1.view.backgroundColor = UIColor.gray;
         let na1 = UINavigationController(rootViewController:VC1);
         

@@ -93,6 +93,7 @@ class OneVController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print("1111111",indexPath.row);
         let Oc:OCVController = OCVController.init();
         Oc.hidesBottomBarWhenPushed = true;
+        Oc.nameStr = dataArr[indexPath.section];
         self.navigationController?.pushViewController(Oc, animated: true);
         
     }

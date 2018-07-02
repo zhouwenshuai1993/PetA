@@ -10,4 +10,6 @@
 
 @interface OCVController : UIViewController
 
+@property (nonatomic, strong)NSString *nameStr;
+
 @end
