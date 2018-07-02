@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="ChatOneCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ujB-wI-DmW">
+                        <rect key="frame" x="48" y="11" width="224" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="A8J-Ga-I7m"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine" translatesAutoresizingMaskIntoConstraints="NO" id="SMt-KD-jtw">
+                        <rect key="frame" x="9" y="7" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="VIU-LN-ETH"/>
+                            <constraint firstAttribute="height" constant="30" id="XE3-Wj-p6L"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="15"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ces1.png" translatesAutoresizingMaskIntoConstraints="NO" id="JVn-ZV-Qgi">
+                        <rect key="frame" x="281" y="7" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="37Z-sh-WqX"/>
+                            <constraint firstAttribute="width" constant="30" id="6R9-Ju-8gL"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="15"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ujB-wI-DmW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Jow-vj-T9z"/>
+                    <constraint firstItem="SMt-KD-jtw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="9" id="Ka6-wO-1Z7"/>
+                    <constraint firstItem="ujB-wI-DmW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="32" id="OMv-ht-N0y"/>
+                    <constraint firstItem="JVn-ZV-Qgi" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="eFO-mo-BaL"/>
+                    <constraint firstItem="JVn-ZV-Qgi" firstAttribute="leading" secondItem="ujB-wI-DmW" secondAttribute="trailing" constant="9" id="ezB-yJ-AHS"/>
+                    <constraint firstItem="ujB-wI-DmW" firstAttribute="leading" secondItem="SMt-KD-jtw" secondAttribute="trailing" constant="9" id="hTZ-Kr-BcH"/>
+                    <constraint firstAttribute="trailing" secondItem="JVn-ZV-Qgi" secondAttribute="trailing" constant="9" id="k5G-qW-PVq"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ujB-wI-DmW" secondAttribute="trailing" constant="32" id="php-36-w1B"/>
+                    <constraint firstItem="SMt-KD-jtw" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="t2C-Ho-heq"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="contentLB" destination="ujB-wI-DmW" id="LhG-ih-oAj"/>
+                <outlet property="oneImageV" destination="SMt-KD-jtw" id="dXl-UO-Iee"/>
+                <outlet property="twoImageV" destination="JVn-ZV-Qgi" id="7P1-0R-ieY"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ces1.png" width="128" height="126"/>
+        <image name="mine" width="26" height="24"/>
+    </resources>
+</document>
