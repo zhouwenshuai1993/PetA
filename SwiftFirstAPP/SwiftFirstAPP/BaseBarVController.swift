@@ -62,7 +62,7 @@ class BaseBarVController: UITabBarController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-       
+       NSLog("回收内存");
         
     }
     
